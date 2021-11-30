@@ -23,7 +23,6 @@ Download Setup.exe (or Download Setup.zip and extract the .exe) and follow on-sc
 - The Program will ask you if you want to autocopy the encrypted message to clipboard, so that each time you will encrypt a message, the message will be copied automatically to the clipboard. THIS PREFERENCE CANNOT BE CHANGED WITHOUT RESTARTING THE PROGRAM AS OF Iniital Release v1.0 BUT MIGHT BE IMPLEMENTED LATER.
 - You Can Enter Multiple Commands after the $ Sign to do a task as follows:
 
-#### Commands
 1. **Encrypt:** Use "Encrypt" followed by the message to encrypt it using the key which you have defined earlier.
 2. **Decrypt:** Use "Decrypt" followed by the message to decrypt it using the key which you have defined earlier. Using a key different from the one which was used in encryption will result in a faulty decryption.
 3. **Key:** Use "Key" followed by the key to change the current key for the session. NOTE:- A Key must have 8 characters, and should NOT comprise of numeric digits.
