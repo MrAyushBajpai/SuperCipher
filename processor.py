@@ -1,5 +1,5 @@
 from random import randint
-import string
+from string import printable
 
 
 class Keys:
@@ -16,7 +16,7 @@ class Keys:
 def encrypt(data: str, key: Keys):
     data = list(data)
     key_value = Keys.getvalue(key)
-    first_list = list(string.printable)
+    first_list = list(printable)
     first_list = first_list[:95]
     second_list = first_list
 
@@ -33,9 +33,9 @@ def encrypt(data: str, key: Keys):
         right_place_offset += ord(i)
 
     average_place_offset = place_offset // len(key_value)
-    i = 0
     data_length = len(data)
     offset = (average_place_offset % 3) + 1
+    i = 0
     while i < data_length:
         data.insert(i, chr(randint(33, 125)))
         i += offset
@@ -61,7 +61,7 @@ def encrypt(data: str, key: Keys):
 def decrypt(data: str, key: Keys):
     data = list(data)
     key_value = Keys.getvalue(key)
-    first_list = list(string.printable)
+    first_list = list(printable)
     first_list = first_list[:95]
     second_list = first_list
 
