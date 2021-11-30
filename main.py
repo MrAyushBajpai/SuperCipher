@@ -1,5 +1,20 @@
+import sys
 from itertools import chain, cycle
-from processor import encrypt, decrypt, Keys
+
+from time import sleep
+try:
+    from processor import encrypt, decrypt, Keys
+except ImportError:
+    print('Module processor not found! Is the file processor.py in the same folder as main.py?')
+    sleep(5)
+    sys.exit()
+
+try:
+    from pyperclip import copy
+except ImportError:
+    print('Module pyperclip not found! Please use "pip install pyperclip" to continue')
+    sleep(5)
+    sys.exit()
 
 if __name__ == '__main__':
     while True:
@@ -24,7 +39,11 @@ if __name__ == '__main__':
         if msg[0].lower() == 'encrypt':
             to_encrypt = ''.join(msg[1:]).strip()
             print('Encrypting: ', to_encrypt)
-            print(f'Encrypted Msg is: {encrypt(to_encrypt, key_to_use)}')
+            encrypted_message = encrypt(to_encrypt, key_to_use)
+            print(f'Encrypted Msg is: {encrypted_message}')
+            if to_copy:
+                print('Copied To Clipboard!')
+                copy(encrypted_message)
 
         elif msg[0].lower() == 'decrypt':
             to_decrypt = ''.join(msg[1:]).strip()
@@ -35,7 +54,10 @@ if __name__ == '__main__':
             key = ''.join(msg[1:]).strip()
             if len(key) >= 8:
                 if 'y' in input(f'The Key for this session will be changed to: {key}. Continue? (Y/N): ').lower():
-                    key_to_use = Keys(key)
+                    key_to_use.setvalue(key)
                     print('The Key is changed!')
             else:
                 print('Please Use a Key with at least 8 characters.')
+        else:
+            print(f'UNKNOWN COMMAND "{msg[0]}"')
+        print('\n')
