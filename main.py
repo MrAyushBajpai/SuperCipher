@@ -1,6 +1,6 @@
 import sys
 from itertools import chain, cycle
-
+import webbrowser
 from time import sleep
 try:
     from processor import encrypt, decrypt, Keys
@@ -35,6 +35,7 @@ if __name__ == '__main__':
         to_copy = True
 
     while True:
+        print('\n')
         msg = input('$: ')
         msg = list(chain(*zip(msg.split(), cycle(' '))))[:-1]
 
@@ -60,6 +61,13 @@ if __name__ == '__main__':
                     print('The Key is changed!')
             else:
                 print('Please Use a Key with at least 8 characters, and do not use numbers.')
+
+        elif msg[0].lower() == 'help':
+            webbrowser.open('README.md')
+
+        elif msg[0].lower() == 'exit' or msg[0].lower() == 'close':
+            if 'y' in input('Do You Want to Close the Program? (Y/N): ').lower():
+                sys.exit()
+
         else:
-            print(f'UNKNOWN COMMAND "{msg[0]}"')
-        print('\n')
+            print(f'Command "{msg[0]}" Not Found! Please check the spelling again, or read the readme for more info.')
