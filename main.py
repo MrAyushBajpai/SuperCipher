@@ -62,6 +62,22 @@ if __name__ == '__main__':
             else:
                 print('Please Use a Key with at least 8 characters, and do not use numbers.')
 
+        elif msg[0].lower() == 'clipboard' or msg[0].lower() == 'copy':
+            if to_copy:
+                if 'y' in input('Currently Your Encrypted Messages are being copied to the clipboard. Turn this off? '
+                                '(Y/N): ').lower():
+                    to_copy = False
+                    print('Auto Copy Turned Off!')
+                else:
+                    print("Auto Copy is still On")
+            else:
+                if 'y' in input('Currently Your Encrypted Messages are not being copied to the clipboard. Turn this '
+                                'on? (Y/N): ').lower():
+                    to_copy = True
+                    print('Auto Copy Turned On!')
+                else:
+                    print('Auto Copy is still Off')
+
         elif msg[0].lower() == 'help':
             webbrowser.open('README.md')
 
