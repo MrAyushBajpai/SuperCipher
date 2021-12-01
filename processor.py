@@ -2,7 +2,6 @@ import os.path
 from random import randint
 from string import printable
 from datetime import datetime
-from os import path
 
 
 def encrypt(data: str, key_value: str):
@@ -101,7 +100,7 @@ def decrypt(data: str, key_value: str):
 def logcat(data):
     try:
         if os.path.getsize('log.txt') > 5000000:
-            with open('log.txt', 'w') as f:
+            with open('log.txt', 'w'):
                 pass
     except FileNotFoundError:
         pass
