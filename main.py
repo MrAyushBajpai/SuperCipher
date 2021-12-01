@@ -4,20 +4,28 @@ import webbrowser
 from time import sleep
 
 try:
-    from processor import encrypt, decrypt
+    from processor import encrypt, decrypt, logcat
 except ImportError:
     print('Module processor not found! Is the file processor.py in the same folder as main.py?')
     sleep(5)
     sys.exit()
 
+logcat('PROGRAM STARTED')
+
 try:
     from pyperclip import copy
     found = True
+    logcat('pyperclip Found')
 except ImportError:
     print('Module pyperclip not found! Auto Copy to Clipboard will be unavailable.')
     copy = None
+    logcat('pyperclip Not Found')
 
 if __name__ == '__main__':
+    to_log = input('Maintain a log of this session? (Y/N): ')
+    to_log = True if 'y' in to_log.lower() else False
+    logcat(f'Logging for this session: {to_log}')
+
     while True:
         key_to_use = input('Enter the key to use for this session: ')
         if len(key_to_use) < 8:
@@ -25,7 +33,10 @@ if __name__ == '__main__':
         elif '1234567890' in key_to_use:
             print('Please do not use numbers! You can use special characters.')
         else:
+            if to_log:
+                logcat(f'Key for session -- {key_to_use}')
             break
+
     if copy is not None:
         to_copy = input('Auto Copy Encrypted Text to Clipboard? (Y/N): ').lower()
         if 'n' in to_copy:
@@ -37,9 +48,14 @@ if __name__ == '__main__':
     else:
         to_copy = False
 
+    if to_log:
+        logcat(f'Auto Copy for this session: {to_copy}')
+
     while True:
         print('\n')
         msg = input('$: ')
+        if to_log:
+            logcat(f'Command Entered: {msg}')
         msg = list(chain(*zip(msg.split(), cycle(' '))))[:-1]
 
         if msg[0].lower() == 'encrypt':
@@ -50,11 +66,16 @@ if __name__ == '__main__':
             if to_copy:
                 print('Copied To Clipboard!')
                 copy(encrypted_message)
+            if to_log:
+                logcat(f'Encrypted {to_encrypt} to {encrypted_message}')
 
         elif msg[0].lower() == 'decrypt':
             to_decrypt = ''.join(msg[1:]).strip()
             print('Decrypting: ', to_decrypt)
-            print(f'Decrypted Msg is: {decrypt(to_decrypt, key_to_use)}')
+            decrypted_message = decrypt(to_decrypt, key_to_use)
+            print(f'Decrypted Msg is: {decrypted_message}')
+            if to_log:
+                logcat(f'Decrypted {to_decrypt} to {decrypted_message}')
 
         elif msg[0].lower() == 'key':
             key = ''.join(msg[1:]).strip()
@@ -62,6 +83,8 @@ if __name__ == '__main__':
                 if 'y' in input(f'The Key for this session will be changed to: {key}. Continue? (Y/N): ').lower():
                     key_to_use = key
                     print('The Key is changed!')
+                    if to_log:
+                        logcat(f'Key For Sessions Changed to {key_to_use}')
             else:
                 print('Please Use a Key with at least 8 characters, and do not use numbers.')
 
@@ -72,25 +95,38 @@ if __name__ == '__main__':
                                     'off? (Y/N): ').lower():
                         to_copy = False
                         print('Auto Copy Turned Off!')
+                        if to_log:
+                            logcat('Auto Copy Turned Off')
                     else:
                         print("Auto Copy is still On")
+                        if to_log:
+                            logcat('Auto Copy is still On')
                 else:
                     if 'y' in input('Currently Your Encrypted Messages are not being copied to the clipboard. Turn '
                                     'this on? (Y/N): ').lower():
                         to_copy = True
                         print('Auto Copy Turned On!')
+                        if to_log:
+                            logcat('Auto Copy Turned On')
                     else:
                         print('Auto Copy is still Off')
+                        if to_log:
+                            logcat('Auto Copy is till Off')
             else:
                 print('The Module pyperclip was not found. Clipboard functions are unavailable. '
                       'Use "pip install pyperclip" to install it.')
 
         elif msg[0].lower() == 'help':
             webbrowser.open('README.md')
+            if to_log:
+                logcat('User Requested Help')
 
         elif msg[0].lower() == 'exit' or msg[0].lower() == 'close':
             if 'y' in input('Do You Want to Close the Program? (Y/N): ').lower():
+                logcat('Program Exit By Command')
                 sys.exit()
 
         else:
             print(f'Command "{msg[0]}" Not Found! Please check the spelling again, or read the readme for more info.')
+            if to_log:
+                logcat(f'Invalid Command: {msg[0]}')
