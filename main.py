@@ -2,6 +2,7 @@ import sys
 from itertools import chain, cycle
 import webbrowser
 from time import sleep
+
 try:
     from processor import encrypt, decrypt
 except ImportError:
@@ -11,10 +12,10 @@ except ImportError:
 
 try:
     from pyperclip import copy
+    found = True
 except ImportError:
-    print('Module pyperclip not found! Please use "pip install pyperclip" to continue')
-    sleep(5)
-    sys.exit()
+    print('Module pyperclip not found! Auto Copy to Clipboard will be unavailable.')
+    copy = None
 
 if __name__ == '__main__':
     while True:
@@ -25,14 +26,16 @@ if __name__ == '__main__':
             print('Please do not use numbers! You can use special characters.')
         else:
             break
-
-    to_copy = input('Auto Copy Encrypted Text to Clipboard? (Y/N): ').lower()
-    if 'n' in to_copy:
-        print('Encrypted Messages will NOT be automatically copied to the clipboard!')
-        to_copy = False
+    if copy is not None:
+        to_copy = input('Auto Copy Encrypted Text to Clipboard? (Y/N): ').lower()
+        if 'n' in to_copy:
+            print('Encrypted Messages will NOT be automatically copied to the clipboard!')
+            to_copy = False
+        else:
+            print('Encrypted Messages will be automatically copied to the clipboard!')
+            to_copy = True
     else:
-        print('Encrypted Messages will be automatically copied to the clipboard!')
-        to_copy = True
+        to_copy = False
 
     while True:
         print('\n')
@@ -63,20 +66,24 @@ if __name__ == '__main__':
                 print('Please Use a Key with at least 8 characters, and do not use numbers.')
 
         elif msg[0].lower() == 'clipboard' or msg[0].lower() == 'copy':
-            if to_copy:
-                if 'y' in input('Currently Your Encrypted Messages are being copied to the clipboard. Turn this off? '
-                                '(Y/N): ').lower():
-                    to_copy = False
-                    print('Auto Copy Turned Off!')
+            if copy is not None:
+                if to_copy:
+                    if 'y' in input('Currently Your Encrypted Messages are being copied to the clipboard. Turn this '
+                                    'off? (Y/N): ').lower():
+                        to_copy = False
+                        print('Auto Copy Turned Off!')
+                    else:
+                        print("Auto Copy is still On")
                 else:
-                    print("Auto Copy is still On")
+                    if 'y' in input('Currently Your Encrypted Messages are not being copied to the clipboard. Turn '
+                                    'this on? (Y/N): ').lower():
+                        to_copy = True
+                        print('Auto Copy Turned On!')
+                    else:
+                        print('Auto Copy is still Off')
             else:
-                if 'y' in input('Currently Your Encrypted Messages are not being copied to the clipboard. Turn this '
-                                'on? (Y/N): ').lower():
-                    to_copy = True
-                    print('Auto Copy Turned On!')
-                else:
-                    print('Auto Copy is still Off')
+                print('The Module pyperclip was not found. Clipboard functions are unavailable. '
+                      'Use "pip install pyperclip" to install it.')
 
         elif msg[0].lower() == 'help':
             webbrowser.open('README.md')
