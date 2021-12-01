@@ -3,7 +3,7 @@ from itertools import chain, cycle
 import webbrowser
 from time import sleep
 try:
-    from processor import encrypt, decrypt, Keys
+    from processor import encrypt, decrypt
 except ImportError:
     print('Module processor not found! Is the file processor.py in the same folder as main.py?')
     sleep(5)
@@ -18,10 +18,10 @@ except ImportError:
 
 if __name__ == '__main__':
     while True:
-        key_to_use = Keys(input('Enter the key to use for this session: '))
-        if len(key_to_use.getvalue()) < 8:
+        key_to_use = input('Enter the key to use for this session: ')
+        if len(key_to_use) < 8:
             print('Please enter a key with at least eight characters!')
-        elif '1234567890' in key_to_use.getvalue():
+        elif '1234567890' in key_to_use:
             print('Please do not use numbers! You can use special characters.')
         else:
             break
@@ -57,7 +57,7 @@ if __name__ == '__main__':
             key = ''.join(msg[1:]).strip()
             if len(key) >= 8 and '1234567890' not in key:
                 if 'y' in input(f'The Key for this session will be changed to: {key}. Continue? (Y/N): ').lower():
-                    key_to_use.setvalue(key)
+                    key_to_use = key
                     print('The Key is changed!')
             else:
                 print('Please Use a Key with at least 8 characters, and do not use numbers.')

@@ -2,20 +2,8 @@ from random import randint
 from string import printable
 
 
-class Keys:
-    def __init__(self, value):
-        self.Value = value
-
-    def getvalue(self):
-        return self.Value
-
-    def setvalue(self, value):
-        self.Value = value
-
-
-def encrypt(data: str, key: Keys):
+def encrypt(data: str, key_value: str):
     data = list(data)
-    key_value = Keys.getvalue(key)
     first_list = list(printable)
     first_list = first_list[:95]
     second_list = first_list
@@ -58,9 +46,8 @@ def encrypt(data: str, key: Keys):
     return ''.join(new_data)
 
 
-def decrypt(data: str, key: Keys):
+def decrypt(data: str, key_value: str):
     data = list(data)
-    key_value = Keys.getvalue(key)
     first_list = list(printable)
     first_list = first_list[:95]
     second_list = first_list
