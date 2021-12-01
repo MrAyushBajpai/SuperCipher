@@ -41,7 +41,10 @@ def encrypt(data: str, key_value: str):
 
     new_data = []
     for i in data:
-        new_data.append(second_list[first_list.index(i)])
+        if i in '\n\t\r\x0b\x0c':
+            new_data.append(i)
+        else:
+            new_data.append(second_list[first_list.index(i)])
 
     return ''.join(new_data)
 
@@ -74,7 +77,10 @@ def decrypt(data: str, key_value: str):
 
     new_data = []
     for i in data:
-        new_data.append(first_list[second_list.index(i)])
+        if i in '\n\t\r\x0b\x0c':
+            new_data.append(i)
+        else:
+            new_data.append(first_list[second_list.index(i)])
 
     new_data = [new_data[(i - place_offset) % len(new_data)]
                 for i, x in enumerate(new_data)]
