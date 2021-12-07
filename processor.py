@@ -1,7 +1,6 @@
 import os.path
 from random import randint
 from string import printable
-from datetime import datetime
 
 
 def encrypt(data: str, key_value: str):
@@ -95,16 +94,3 @@ def decrypt(data: str, key_value: str):
     data = [i for i in new_data if i != 'DELETE']
 
     return ''.join(data)
-
-
-def logcat(data):
-    try:
-        if os.path.getsize('log.txt') > 5000000:
-            with open('log.txt', 'w'):
-                pass
-    except FileNotFoundError:
-        pass
-    now = datetime.now()
-    date_time = now.strftime("%D/%M/%Y, %H:%M:%S")
-    with open('log.txt', 'a+') as f:
-        f.write(f'[{date_time}] -- {data}\n')
